@@ -43,8 +43,5 @@ WORKDIR /home/
 RUN git clone https://github.com/dushyantkhosla/ds-template-01.git
 WORKDIR /home/ds-template-01
 
-# Install basic packages
-RUN pip install -r requirements.txt
-
 EXPOSE 8080
 CMD ["bash"]
