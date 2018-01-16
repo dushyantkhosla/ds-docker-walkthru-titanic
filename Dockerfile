@@ -1,47 +1,54 @@
 FROM centos:latest
-MAINTAINER Dushyant Khosla <dushyant.khosla@pmi.com>
+MAINTAINER Dushyant Khosla <dushyant.khosla@yahoo.com
 
-# Install Essentials
-RUN yum -y update
-RUN yum -y upgrade
-RUN yum -y install epel-release
+# === COPY FILES ===
 
-# Install Python, Upgrade Pip
-RUN yum -y install python-dev \
-                   python-setuptools \
-                   python-pip
-RUN pip install --upgrade pip
+COPY environment.yml /root/environment.yml
+COPY start.sh /etc/profile.d/
 
-# Install other non-python libraries
-RUN yum -y install tmux \
-                   bzip2 \
+# === SET ENVIRONMENT VARIABLES ===
+
+ENV PATH="/miniconda/bin:${PATH}"
+ENV LANGUAGE en_US.UTF-8
+ENV LANG en_US.UTF-8
+
+# === INSTALL DEPENDENCIES ===
+
+WORKDIR /root
+RUN yum -y install bzip2 \
+                   curl \
+                   curl-devel \
+                   perl-devel \
+                   perl-CPAN \
+                   tmux \
                    wget \
-                   curl-devel
+                   which \
+                   zlib-devel \
+	&& yum -y groupinstall "Development Tools" \
+&& yum -y remove git \
+	&& wget https://github.com/git/git/archive/v2.15.1.tar.gz -O git.tar.gz \
+	&& tar -zxf git.tar.gz \
+	&& rm -f git.tar.gz \
+&& wget --quiet https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh \
+	&& bash miniconda.sh  -b -p /miniconda \
+	&& conda config --append channels conda-forge \
+	&& conda env create -f environment.yml \
+	&& conda clean -i -l -t -y \
+	&& rm miniconda.sh \
+&& wget https://download.opensuse.org/repositories/shells:fish:release:2/CentOS_7/shells:fish:release:2.repo -P /etc/yum.repos.d/ \
+	&& yum install -y fish \
+&& yum -y autoremove \
+  	&& yum clean all \
+	&& rm -rf /var/cache/yum
 
-# Install Development Tools
-RUN yum -y groupinstall "Development Tools"
-RUN yum -y install gettext-devel openssl-devel perl-CPAN perl-devel zlib-devel
+WORKDIR /root/git-2.15.1
+RUN make configure \
+	&& ./configure --prefix=/usr/local \
+	&& make install \
+	&& rm -rf /git-2.15.1
 
-# Install latest version of Git
-RUN yum -y remove git
-RUN wget https://github.com/git/git/archive/v2.15.1.tar.gz -O git.tar.gz
-RUN tar -zxf git.tar.gz
-RUN rm -f git.tar.gz
-WORKDIR git-2.15.1
-RUN make configure
-RUN ./configure --prefix=/usr/local
-RUN make install
-RUN rm -rf /git-2.15.1/
+# === INITIALIZE ===
 
-# Clean up
-RUN yum -y autoremove
-RUN yum clean all
-RUN rm -rf /var/cache/yum
-
-# Start Here
 WORKDIR /home/
-RUN git clone https://github.com/dushyantkhosla/ds-template-01.git
-WORKDIR /home/ds-template-01
-
 EXPOSE 8080
-CMD ["bash"]
+CMD /usr/bin/bash
