@@ -2,13 +2,13 @@ import os
 import pandas as pd
 
 # Declare constants
-ROOT = '/home/ds-template-01/'
+ROOT = '/home'
 PATH_TO_DATA_RAW = ROOT + 'data/00-raw/'
 
 URL_TITANIC = 'https://raw.githubusercontent.com/dushyantkhosla/tiny-datasets/master/titanic.csv'
 
 # Declare functions
-def get_titanic_data(filename='titanic_data.csv', url=URL_TITANIC, force_download=False):
+def get_raw_data(filename='titanic_data.csv', url=URL_TITANIC, force_download=False):
     """Download and cache the Titanic Data
     
     Parameters
