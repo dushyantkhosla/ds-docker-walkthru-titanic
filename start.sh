@@ -1,8 +1,9 @@
 # Activate the Conda environment
 source activate ds-env
 
-git config --global user.email "$GIT_USER_NAME"
-git config --global user.name "$GIT_USER_MAIL"
+# Configure Git
+git config --global user.email $GIT_USER_NAME
+git config --global user.name $GIT_USER_MAIL
 
 # Print information
 echo ""
@@ -24,7 +25,7 @@ echo "-----------------------------------------------------------------"
 echo "jupyter notebook --allow-root --no-browser --ip 0.0.0.0 --port 8080"
 
 echo ""
-echo "Configure git. Run ..."
+echo "If you didn't configure git yet during 'docker run', run ..."
 echo "-----------------------------------------------------------------"
 echo "git config --global user.email 'you@example.com'"
 echo "git config --global user.name 'Your Name'"
