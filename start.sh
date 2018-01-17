@@ -25,10 +25,12 @@ echo "-----------------------------------------------------------------"
 echo "jupyter notebook --allow-root --no-browser --ip 0.0.0.0 --port 8080"
 
 echo ""
-echo "If you didn't configure git yet during 'docker run', run ..."
+echo "If you didn't configure git during 'docker run', run ..."
 echo "-----------------------------------------------------------------"
 echo "git config --global user.email 'you@example.com'"
 echo "git config --global user.name 'Your Name'"
+echo "git config --list"
+
 
 
 echo ""
