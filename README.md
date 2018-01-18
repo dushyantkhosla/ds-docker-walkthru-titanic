@@ -16,7 +16,6 @@ docker run -it -v (pwd):/home \
 ```
 
 - Remember to substitute your own and email for mine. 😏
-- Remember to `git push` the changes that you make.
 
 ### Project Structure
 
