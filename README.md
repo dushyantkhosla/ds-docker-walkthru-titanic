@@ -1,10 +1,10 @@
 # Data Science on Docker // A step-by-step guide
 
-## Download the Docker Image
+### Download the Docker Image
 
 `docker pull eadlab/ds-docker-walkthru-titanic`
 
-## Run the Container
+### Run the Container
 
 ```
 docker run -it -v (pwd):/home \
@@ -18,7 +18,7 @@ docker run -it -v (pwd):/home \
 - Remember to substitute your own and email for mine. 😏
 - Remember to `git push` the changes that you make.
 
-## Project Structure
+### Project Structure
 
 - Start developing your code in Jupyter, saved under `notebooks/`
     - Follow the `OSEMN` model, (Create a notebook each for **O**btaining, **S**crubbing, **Evxploring, **M**odeling and i**N**terpreting) 
