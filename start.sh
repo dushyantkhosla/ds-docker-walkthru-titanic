@@ -5,6 +5,15 @@ source activate ds-env
 git config --global user.name $GIT_USER_NAME
 git config --global user.email $GIT_USER_MAIL
 
+# Install Work Sans
+mkdir -p /usr/share/fonts/user
+wget --quiet 'https://fonts.google.com/download?family=Work%20Sans' -O Work_Sans.zip
+unzip Work_Sans.zip
+mv *.ttf /usr/share/fonts/user
+fc-cache -f -v
+
+clear
+
 # Print information
 echo ""
 echo ""
@@ -31,7 +40,13 @@ echo "git config --global user.email 'you@example.com'"
 echo "git config --global user.name 'Your Name'"
 echo "git config --list"
 
-
+echo ""
+echo "To Install a new TTF (to make good looking charts)"
+echo "-----------------------------------------------------------------"
+echo "wget --quiet 'https://fonts.google.com/download?family=foo' -O foo.zip"
+echo "unzip foo.zip"
+echo "mv *.ttf /usr/share/fonts/user"
+echo "fc-cache -f -v"
 
 echo ""
 echo ""
