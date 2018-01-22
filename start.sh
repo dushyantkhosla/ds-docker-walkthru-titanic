@@ -7,12 +7,11 @@ git config --global user.email $GIT_USER_MAIL
 
 # Install Work Sans
 mkdir -p /usr/share/fonts/user
-wget --quiet 'https://fonts.google.com/download?family=Work%20Sans' -O Work_Sans.zip
-unzip Work_Sans.zip
-mv *.ttf /usr/share/fonts/user
+cd /usr/share/fonts/user
+wget --quiet 'https://fonts.google.com/download?family=Montserrat|Raleway|Roboto|Ubuntu|Open%20Sans|Work%20Sans' -O fonts.zip
+unzip fonts.zip
 fc-cache -f -v
-
-clear
+rm fonts.zip
 
 # Print information
 echo ""
