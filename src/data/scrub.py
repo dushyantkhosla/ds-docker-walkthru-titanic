@@ -1,6 +1,7 @@
 import os
 os.chdir("/home")
 
+import json
 import pandas as pd
 from pandas import Series, DataFrame
 
@@ -69,12 +70,12 @@ def scrub_raw_data(df):
     print("The following columns have missing data: \n{}".format(have_missing))
     
     for COL in have_missing:
-    """
-    Create a missing flag for each column
-    that has missing data.
-    """
-    newCOL = COL + '__is_null'
-    df.loc[:, newCOL] = df.loc[:, COL].isnull().astype(int)
+        """
+        Create a missing flag for each column
+        that has missing data.
+        """
+        newCOL = COL + '__is_null'
+        df.loc[:, newCOL] = df.loc[:, COL].isnull().astype(int)
     
     print("Age is approximately normally distributed, but Fare is skewed.")
     print("Using the mean for Age and Median for Fare to impute missing data.")
