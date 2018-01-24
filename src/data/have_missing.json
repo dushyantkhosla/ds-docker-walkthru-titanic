@@ -1,8 +1,0 @@
-{
-    "have_missing": [
-        "age", 
-        "fare", 
-        "cabinnumber", 
-        "embarked"
-    ]
-}

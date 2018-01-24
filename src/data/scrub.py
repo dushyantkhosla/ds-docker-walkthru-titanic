@@ -4,27 +4,7 @@ os.chdir("/home")
 import json
 import pandas as pd
 from pandas import Series, DataFrame
-
-def json_save(x, PATH):
-    """
-    Save a Python Dict as a JSON file for persistence
-    
-    Parameters
-    ----------
-    x: dict
-        The Python dict to be persisted
-    PATH: string
-        The full path to destination folder
-        
-    Returns
-    -------
-    None
-    """
-    import json
-    with open(PATH, 'w') as fp:
-        json.dump(x, fp, sort_keys=True, indent=4)
-    
-    return None
+from src import scrub_params
 
 def scrub_raw_data(df):
     """
@@ -47,6 +27,10 @@ def scrub_raw_data(df):
     df_clean: pandas.DataFrame
         The cleaned Titanic data
     """
+    # === PERSIST ===
+    print("Declaring an empty dictionary to persist information we'll need to scrub new data in production.")
+    dict_persist = {}
+    
     # === COLNAMES ===
     
     print("Fixing column names. (Removing special characters, converting to lowercase. Renaming long columns)")
@@ -66,6 +50,8 @@ def scrub_raw_data(df):
      .index
      .tolist()
     )
+    
+    dict_persist['have_missing'] = have_missing
 
     print("The following columns have missing data: \n{}".format(have_missing))
     
@@ -89,6 +75,10 @@ def scrub_raw_data(df):
     df['age'].fillna(value=age_fillna, inplace=True)
     df['fare'].fillna(value=fare_fillna, inplace=True)
     df['embarked'].fillna(value=embarked_fillna, inplace=True)
+    
+    dict_persist['age_fillna'] = age_fillna
+    dict_persist['fare_fillna'] = fare_fillna
+    dict_persist['embarked_fillna'] = embarked_fillna
     
     # === NEW FEATURES, DUMMIES ===
     
@@ -116,6 +106,9 @@ def scrub_raw_data(df):
     
     print("Backing up the data. \nOkay, all Done. Happy Exploring!")
     df.to_csv("/home/data/04-processed/titanic.csv", index=False)
+
+    with open(scrub_params, 'w') as fp:
+        json.dump(dict_persist, fp)
     
     return df
     

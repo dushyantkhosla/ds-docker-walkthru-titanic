@@ -1,0 +1,1 @@
+scrub_params = '/home/src/data/scrub_parameters.json'

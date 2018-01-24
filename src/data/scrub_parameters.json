@@ -1,0 +1,1 @@
+{"embarked_fillna": "S", "age_fillna": 29.8811345124283, "fare_fillna": 14.4542, "have_missing": ["age", "fare", "cabinnumber", "embarked"]}
