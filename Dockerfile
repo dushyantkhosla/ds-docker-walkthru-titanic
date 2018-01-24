@@ -50,5 +50,5 @@ RUN make configure \
 # === INITIALIZE ===
 
 WORKDIR /home/
-EXPOSE 8080
+EXPOSE 8080 5000
 CMD /usr/bin/bash
