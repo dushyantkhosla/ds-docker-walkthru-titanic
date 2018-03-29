@@ -1,20 +1,19 @@
 import os
+
 import pandas as pd
 from pandas import Series, DataFrame
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import ExtraTreeClassifier
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 
 def find_important_variables(X=DataFrame(), y=Series(), verbose=True):
     """
     """
     try:
-        if verbose: 
-            print "Importing Libraries..."
-        from sklearn.preprocessing import StandardScaler
-        from sklearn.feature_selection import SelectKBest, f_classif
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.tree import ExtraTreeClassifier
-        from sklearn.svm import LinearSVC
-        from sklearn.linear_model import LogisticRegression
-
         if verbose: 
             print "There are {} variables.".format(X.shape[1])
 
@@ -24,10 +23,12 @@ def find_important_variables(X=DataFrame(), y=Series(), verbose=True):
          .where(lambda sd: sd==0)
          .dropna()
          .index
-         .tolist())
-        X.drop(zv, axis=1, inplace=True)
+         .tolist()
+        )
+        
         if verbose: 
             print "There are {} Zero Variance Predictors. Ignoring these...".format(len(zv))
+        X.drop(zv, axis=1, inplace=True)
 
         missings = \
         (X
@@ -36,13 +37,16 @@ def find_important_variables(X=DataFrame(), y=Series(), verbose=True):
           .where(lambda x: x > 0.9)
           .dropna()
           .index
-          .tolist())
+          .tolist()
+        )
+        
         if verbose: 
             print "There are {} Variables with over 90% missing data. Ignoring these...".format(len(missings))
         X.drop(missings, axis=1, inplace=True)
 
         if verbose: 
             print "Now there are {} variables.".format(X.shape[1])
+        
         if verbose: 
             print "Scaling Data (filling missings with Zeros.)..."
         scale = StandardScaler()
