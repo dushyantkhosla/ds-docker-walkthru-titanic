@@ -2,17 +2,11 @@ import os
 import json
 import pandas as pd
 
-# Declare constants
-ROOT = '/home'
-PATH_TO_DATA_RAW = ROOT + 'data/00-raw/'
-
-URL_TITANIC = 'https://raw.githubusercontent.com/dushyantkhosla/tiny-datasets/master/titanic.csv'
-
 # Declare functions
-def get_raw_data(filename='titanic_data.csv', url=URL_TITANIC, force_download=False):
+def get_raw_data(url, force_download=False):
     """
     Download and cache the Titanic Data
-    
+
     Parameters
     ----------
     filename: string (optional)
@@ -21,28 +15,28 @@ def get_raw_data(filename='titanic_data.csv', url=URL_TITANIC, force_download=Fa
         web location of the data
     force_download: bool (optional)
         if True, download the data again
-        
+
     Returns
     -------
     df_raw: pandas.DataFrame
         The Titanic data
     """
-    if force_download or not os.path.exists(PATH_TO_DATA_RAW + filename):
-        df_raw = pd.read_csv(URL_TITANIC)
+    if force_download or not os.path.exists("data/raw/titanic.csv"):
+        df_raw = pd.read_csv(url)
     else:
-        df_raw = pd.read_csv(PATH_TO_DATA_RAW + filename)
+        df_raw = pd.read_csv("data/raw/titanic.csv")
     return df_raw
-        
-        
+
+
 def json_read(f):
     """
     Read a JSON file into a Python Dict
-    
+
     Parameters
     ----------
     f: string
         Path to a .json file
-        
+
     Returns
     -------
     Dictionary
@@ -53,13 +47,15 @@ def json_read(f):
                 return json.load(fp)
         else:
             print("File does not exist.")
+            return None
     except:
         print("An error occured while reading the JSON file.")
-        
+        return None
+
 def json_write(x, path):
     """
     Write a python dict to a JSON file
-    
+
     Parameters
     ----------
     x: dict
@@ -69,5 +65,10 @@ def json_write(x, path):
     """
     with open(path, 'w') as fp:
         json.dump(x, fp)
-        
+
     return None
+
+if __name__ == '__main__':
+    from src import PROJECT_DIR, URL_TITANIC
+    os.chdir(PROJECT_DIR)
+    df_titanic = get_raw_data(url=URL_TITANIC)
