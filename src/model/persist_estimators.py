@@ -1,8 +1,5 @@
-import os
-os.chdir("/home")
-
 import numpy as np
-from src.data.obtain import json_read, json_write
+from src.obtain import json_read, json_write
 
 def persist(e):
     """

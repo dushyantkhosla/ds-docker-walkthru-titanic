@@ -1,5 +1,6 @@
 import os
 import json
+import string
 import pandas as pd
 from pandas import Series, DataFrame
 
@@ -33,10 +34,10 @@ def scrub_raw_data(df):
 
     # === COLNAMES ===
 
-    print("Fixing column names. (Removing special characters, converting to lowercase. Renaming long columns)")
-    df.columns = map(lambda i: i.lower().translate(None, './()& '),
-                     df.columns.tolist())
+    remove_ = str.maketrans(dict.fromkeys(string.punctuation + ' '))
 
+    print("Fixing column names. (Removing special characters, converting to lowercase. Renaming long columns)")
+    df.columns = list(map(lambda i: i.lower().translate(remove_), df.columns.tolist()))
     df.rename(columns={'siblingsspousesaboard': 'sibsp'}, inplace=True)
 
     # === MISSINGS ===
@@ -104,12 +105,13 @@ def scrub_raw_data(df):
 
     # === BACKUP ===
 
-    print("Backing up the data. \nOkay, all Done. Happy Exploring!")
-    df.to_csv("/home/data/04-processed/titanic.csv", index=False)
+    print("Backing up the data/")
+    df.to_csv("data/04-processed/titanic.csv", index=False)
 
-    with open("data/interim/scrub_params.json", 'w') as fp:
+    with open("data/02-interim/scrub_params.json", 'w') as fp:
         json.dump(dict_persist, fp)
-    print("Scrub Parameters have been presisted 'data/interim/scrub_params.json'")
+    print("Scrub Parameters have been presisted at 'data/interim/scrub_params.json'")
+    print("Okay, all Done. Happy Exploring!")
 
     return df
 
@@ -117,12 +119,16 @@ def get_clean_data():
     """
     Recover cleaned data from backup or download again and clean it
     """
-    if not os.path.exists("data/processed/titanic.csv"):
+    if not os.path.exists("data/04-processed/titanic.csv"):
         df_titanic_clean = scrub_raw_data(get_raw_data(url=URL_TITANIC))
-        df_titanic_clean.to_csv("data/processed/titanic.csv")
+        df_titanic_clean.to_csv("data/processed/titanic.csv", index=False)
     else:
-        df_titanic_clean = pd.read_csv("data/raw/titanic.csv")
+        df_titanic_clean = pd.read_csv("data/04-processed/titanic.csv")
     return df_titanic_clean
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append(os.getcwd())
+    from src import URL_TITANIC
+    df_titanic = get_raw_data(url=URL_TITANIC)
     df = get_clean_data()
