@@ -2,7 +2,6 @@ import os
 import json
 import pandas as pd
 
-# Declare functions
 def get_raw_data(url, force_download=False):
     """
     Download and cache the Titanic Data
@@ -21,14 +20,15 @@ def get_raw_data(url, force_download=False):
     df_raw: pandas.DataFrame
         The Titanic data
     """
-    if force_download or not os.path.exists("data/raw/titanic.csv"):
+    if force_download or not os.path.exists("data/00-raw/titanic.csv"):
         df_raw = pd.read_csv(url)
+        df_raw.to_csv("data/00-raw/titanic.csv", index=False)
     else:
-        df_raw = pd.read_csv("data/raw/titanic.csv")
+        df_raw = pd.read_csv("data/00-raw/titanic.csv")
     return df_raw
 
 
-def json_read(f):
+def json_read(file):
     """
     Read a JSON file into a Python Dict
 
@@ -42,8 +42,8 @@ def json_read(f):
     Dictionary
     """
     try:
-        if os.path.exists(f):
-            with open(f, 'r') as fp:
+        if os.path.exists(file):
+            with open(file, 'r') as fp:
                 return json.load(fp)
         else:
             print("File does not exist.")
@@ -69,6 +69,9 @@ def json_write(x, path):
     return None
 
 if __name__ == '__main__':
-    from src import PROJECT_DIR, URL_TITANIC
-    os.chdir(PROJECT_DIR)
+    import sys
+    sys.path.append(os.getcwd())
+    from src import URL_TITANIC
     df_titanic = get_raw_data(url=URL_TITANIC)
+    
+    
