@@ -2,7 +2,7 @@
 
 ### Download the Docker Image
 
-`docker pull eadlab/ds-docker-walkthru-titanic`
+`docker pull dushyantkhosla/ds-docker-walkthru-titanic`
 
 ### Run the Container for the first time
 
@@ -12,7 +12,7 @@ docker run -it -v (pwd):/home \
                   -p 5000:5000 \
                   -e GIT_USER_NAME="Dushyant Khosla" \
                   -e GIT_USER_MAIL="dushyant.khosla@yahoo.com" \
-                  eadlab/ds-docker-walkthru-titanic
+                  dushyantkhosla/ds-docker-walkthru-titanic
 ```
 - Remember to substitute your own and email for mine. 😏
 
@@ -28,7 +28,6 @@ docker attach <container-id>
 ```
 
 - Resume working!
-
 
 ### Project Structure
 
