@@ -10,8 +10,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import accuracy_score, recall_score, precision_score, roc_auc_score, f1_score
 from sklearn.model_selection import cross_val_score, cross_val_predict
 
-
-
 def run_classifier(X=DataFrame(), y=Series(), UNCORR=[], TEST_SIZE=0.2, CLF='', GRID={}, SCORING='roc_auc'):
     """
     Input:

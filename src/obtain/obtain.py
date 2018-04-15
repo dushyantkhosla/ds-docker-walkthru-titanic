@@ -21,9 +21,11 @@ def get_raw_data(url, force_download=False):
         The Titanic data
     """
     if force_download or not os.path.exists("data/00-raw/titanic.csv"):
+        print("Downloading data...")
         df_raw = pd.read_csv(url)
         df_raw.to_csv("data/00-raw/titanic.csv", index=False)
     else:
+        print("Retrieving data from backup...")
         df_raw = pd.read_csv("data/00-raw/titanic.csv")
     return df_raw
 
@@ -73,5 +75,3 @@ if __name__ == '__main__':
     sys.path.append(os.getcwd())
     from src import URL_TITANIC
     df_titanic = get_raw_data(url=URL_TITANIC)
-    
-    

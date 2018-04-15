@@ -4,9 +4,6 @@ import string
 import pandas as pd
 from pandas import Series, DataFrame
 
-from src import URL_TITANIC
-from src.obtain import get_raw_data
-
 def scrub_raw_data(df):
     """
     Fix column names
@@ -33,15 +30,14 @@ def scrub_raw_data(df):
     dict_persist = {}
 
     # === COLNAMES ===
+    print("Fixing column names. (Removing special characters, converting to lowercase. Renaming long columns)")
 
     remove_ = str.maketrans(dict.fromkeys(string.punctuation + ' '))
-
-    print("Fixing column names. (Removing special characters, converting to lowercase. Renaming long columns)")
     df.columns = list(map(lambda i: i.lower().translate(remove_), df.columns.tolist()))
+
     df.rename(columns={'siblingsspousesaboard': 'sibsp'}, inplace=True)
 
     # === MISSINGS ===
-
     have_missing = \
     (df
      .isnull()
@@ -66,7 +62,6 @@ def scrub_raw_data(df):
 
     print("Age is approximately normally distributed, but Fare is skewed.")
     print("Using the mean for Age and Median for Fare to impute missing data.")
-    print("Cabin Number has over 70% values missing. Dropping this variable.")
     print("Embarked has only 2 values missing. Imputing with Mode.")
 
     age_fillna = df['age'].mean()
@@ -82,29 +77,25 @@ def scrub_raw_data(df):
     dict_persist['embarked_fillna'] = embarked_fillna
 
     # === NEW FEATURES, DUMMIES ===
-
     print("Creating a column for Gender")
     df.loc[:, 'gender'] = df['name'].map(lambda i: 1 if 'Miss' in i or 'Mrs' in i else 0)
 
-    print("Creating Dummies for Embarked and Passenger Class. \nDone. Now dropping these.")
 
+    print("Creating Dummies for Embarked and Passenger Class.")
     df = df.join(pd.get_dummies(df['embarked'], prefix='embarked'))
     df = df.join(pd.get_dummies(df['passengerclass'], prefix='pclass'))
 
     df.drop(['embarked', 'passengerclass'], axis=1, inplace=True)
 
     # === DROP ===
-
     print("Dropping cabinnumber, ticket and name as they have no predictive value. (Too many uniques)")
     df.drop(['cabinnumber', 'ticket', 'name'], axis=1, inplace=True)
 
     # === TO NUMERIC ===
-
     print("Downcasting numerics to occupy less space.")
-    df = df.apply(lambda c: pd.to_numeric(c, downcast='integer'))
+    df = df.apply(compress_numeric)
 
     # === BACKUP ===
-
     print("Backing up the data/")
     df.to_csv("data/04-processed/titanic.csv", index=False)
 
@@ -121,7 +112,7 @@ def get_clean_data():
     """
     if not os.path.exists("data/04-processed/titanic.csv"):
         df_titanic_clean = scrub_raw_data(get_raw_data(url=URL_TITANIC))
-        df_titanic_clean.to_csv("data/processed/titanic.csv", index=False)
+        df_titanic_clean.to_csv("data/04-processed/titanic.csv", index=False)
     else:
         df_titanic_clean = pd.read_csv("data/04-processed/titanic.csv")
     return df_titanic_clean
@@ -129,6 +120,10 @@ def get_clean_data():
 if __name__ == '__main__':
     import sys
     sys.path.append(os.getcwd())
+
     from src import URL_TITANIC
+    from src.obtain import get_raw_data
+    from src.scrub import compress_numeric
+
     df_titanic = get_raw_data(url=URL_TITANIC)
     df = get_clean_data()
